@@ -1,125 +1,377 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'Cocktail Master',
+      theme: lightTheme,
+      home: const HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _HomePageState extends State<HomePage> {
+  final List<Recipe> _recipes = RecipeProvider().getRecipes();
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  bool _isListView = true;
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        title: const Center(
+          child: Text('Cocktail Master'),
         ),
       ),
+      body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _isListView
+              ? ListView(
+                  children: _recipes.map((Recipe recipe) {
+                    return Dismissible(
+                      key: Key(recipe.name),
+                      // Removing recipe by slide on List Item
+                      onDismissed: (direction) {
+                        setState(() {
+                          _recipes.remove(recipe);
+                        });
+                      },
+                      background: Container(
+                        color: Colors.red,
+                        child: const Padding(
+                          padding: EdgeInsets.all(15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(Icons.delete, color: Colors.white),
+                              SizedBox(
+                                width: 8.0,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      child: RecipeCard(recipe: recipe),
+                    );
+                  }).toList(),
+                )
+              : GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 15,
+                    crossAxisSpacing: 15,
+                    childAspectRatio: 0.90,
+                  ),
+                  shrinkWrap: true,
+                  itemCount: _recipes.length,
+                  itemBuilder: (context, index) {
+                    final recipe = _recipes[index];
+                    // Removing recipe by slide on Grid Item
+                    return Dismissible(
+                      key: Key(recipe.name),
+                      onDismissed: (direction) {
+                        setState(() {
+                          _recipes.removeAt(index);
+                        });
+                      },
+                      background: Container(
+                        color: Colors.red,
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
+                      ),
+                      child: RecipeCard(recipe: recipe, isList: false),
+                    );
+                  },
+                )),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        // Display Grid or List Icon
+        child: _isListView ? const Icon(Icons.grid_on) : const Icon(Icons.list),
+        onPressed: () {
+          setState(() {
+            _isListView = !_isListView;
+          });
+        },
+      ),
     );
   }
 }
+
+// Custom recipe card widget
+// isList cheks if List or Grid selected
+class RecipeCard extends StatelessWidget {
+  final Recipe recipe;
+  final bool isList;
+
+  const RecipeCard({
+    Key? key,
+    required this.recipe,
+    this.isList = true,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      // Round Image corners as in Card
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      // InkWell for Tap ripple effect
+      child: Ink(
+        child: InkWell(
+          onTap: () {
+            _showDialog(context);
+          },
+          child: isList
+              // List View
+              ? Row(
+                  children: [
+                    Image.asset(
+                      recipe.image,
+                      height: 120,
+                      width: 120,
+                      fit: BoxFit.fitHeight,
+                    ),
+                    const SizedBox(width: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          recipe.name,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        TimeContainer(recipe: recipe),
+                      ],
+                    ),
+                  ],
+                )
+              // Grid View
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      recipe.image,
+                      height: 170,
+                      fit: BoxFit.fitWidth,
+                    ),
+                    Text(
+                      recipe.name,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TimeContainer(recipe: recipe),
+                  ],
+                ),
+        ),
+      ),
+    );
+  }
+
+  // Dialog for recipe details and instructions
+  void _showDialog(BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      pageBuilder: (context, animation1, animation2) {
+        return Material(
+          child: Container(
+            width: MediaQuery.of(context).size.width - 10,
+            padding: const EdgeInsets.all(20),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ),
+                  ),
+                  Image.asset(recipe.image),
+                  const SizedBox(height: 16),
+                  Center(
+                    child: TimeContainer(recipe: recipe),
+                  ),
+                  Text(recipe.description),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+      // Animation when dialog is shown from bottom
+      transitionBuilder: (context, a1, a2, widget) {
+        return SlideTransition(
+          position: Tween(begin: const Offset(0, 1), end: const Offset(0, 0))
+              .animate(a1),
+          child: widget,
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 300),
+    );
+  }
+}
+
+// Container for recipe time
+class TimeContainer extends StatelessWidget {
+  const TimeContainer({
+    super.key,
+    required this.recipe,
+  });
+
+  final Recipe recipe;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(children: [
+      const Icon(
+        Icons.access_alarm_outlined,
+        size: 18,
+      ),
+      const SizedBox(width: 3),
+      Text(recipe.time.toString()),
+    ]);
+  }
+}
+
+class Recipe {
+  final String name;
+  final String image;
+  final String description;
+  final int time;
+
+  Recipe(this.name, this.image, this.time, this.description);
+}
+
+class RecipeProvider {
+  List<Recipe> getRecipes() {
+    return [
+      Recipe(
+        'Маргарита',
+        'assets/images/margarita.jpg',
+        5,
+        '''Інгредієнти:
+        50 мл текіли
+        30 мл апельсинового лікеру (наприклад, Cointreau)
+        20 мл лимонного соку
+        Лід
+        Сіль для обрубки склянки
+
+Приготування: Змочіть край склянки лимонним соком і обірвіть в сіль. Змішайте текілу, апельсиновий лікер і лимонний сік в шейкері з льодом. Потім процідіть у підготовлену склянку.''',
+      ),
+      Recipe(
+        'Негроні',
+        'assets/images/negroni.jpg',
+        5,
+        '''Інгредієнти:
+    30 мл джину
+    30 мл біттера Кампарі
+    30 мл вермуту (наприклад, Martini Rosso)
+    Апельсинова цедра або апельсиновий шматочок для гарніру
+    Лід
+
+Приготування:
+
+    Наповніть келишок для коктейлю льодом.
+    Додайте джин, біттер Кампарі і вермут у келишок.
+    Помішайте інгредієнти ложкою.
+    Виразьте апельсиновий шматочок над коктейлем так, щоб ароматний олійний спрій розповсюдився на поверхні напою, і додайте цедру або апельсиновий шматочок для гарніру.''',
+      ),
+      Recipe(
+        'Космополітен',
+        'assets/images/cosmopolitan.jpg',
+        5,
+        '''Інгредієнти:
+        45 мл водки
+        15 мл апельсинового лікеру (наприклад, Triple Sec)
+        30 мл клюквеного соку
+        15 мл лаймового соку
+        Лід
+
+Приготування: Змішайте всі інгредієнти в шейкері з льодом і процідіть у келишок для коктейлю.''',
+      ),
+      Recipe(
+        'Піна Колада',
+        'assets/images/pina-kolada.jpg',
+        5,
+        '''Інгредієнти:
+        60 мл білої рому
+        90 мл ананасового соку
+        60 мл кокосового молока або кокосового крему
+        Лід
+
+Приготування: Змішайте всі інгредієнти в блендері з льодом та зберіть до однорідності. Подавайте зі стружкою кокоса або кількома шматочками ананаса.''',
+      ),
+      Recipe(
+        'Мартіні',
+        'assets/images/martini.jpg',
+        3,
+        '''Інгредієнти:
+        60 мл джину
+        15 мл вермуту
+        Лід
+        Оливки або лимонна цедра для гарніру
+
+Приготування: Змішайте джин та вермут в келишку для мартіні з льодом. Перед подачею прикрасьте оливками або цедрою лимона.''',
+      ),
+      Recipe(
+        'Мохіто',
+        'assets/images/moxito.jpg',
+        5,
+        '''Інгредієнти:
+        50 мл білої рому
+        30 мл свіжого лаймового соку
+        2 чайні ложки цукру
+        6-8 м'яти листків
+        Лід
+        Содова вода
+
+Приготування: В склянці розтрити м'яту з цукром і лаймовим соком. Додайте ром та лід. Завершіть напій содовою водою.''',
+      ),
+    ];
+  }
+}
+
+// Theme data for light Theme
+ThemeData lightTheme = ThemeData(
+  brightness: Brightness.light,
+  useMaterial3: true,
+  textTheme: const TextTheme(
+    displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+    bodyLarge: TextStyle(fontSize: 18, color: Colors.black87),
+  ),
+  appBarTheme: AppBarTheme(
+    titleTextStyle: TextStyle(
+      fontFamily: GoogleFonts.fasthand(
+        fontWeight: FontWeight.w700,
+        fontStyle: FontStyle.italic,
+      ).fontFamily,
+      fontSize: 36,
+      color: const Color.fromARGB(237, 254, 254, 254),
+    ),
+    color: const Color.fromARGB(255, 73, 159, 229),
+    iconTheme: const IconThemeData(color: Colors.white),
+  ),
+  colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+);
