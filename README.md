@@ -9,4 +9,9 @@
   <img src="./assets/lesson8_recipes.gif">
  </details>
 
+ 3. Lesson 9 Homework
+ <details> 
+  <summary>Artworks list</summary>
+  <img src="./assets/lesson9.gif">
+ </details>
  

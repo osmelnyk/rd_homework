@@ -16,7 +16,7 @@ class _LessonScreen8State extends State<LessonScreen8> {
   bool _isListView = true;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return Scaffold(
       appBar: AppBar(
         title: const Center(
@@ -24,8 +24,9 @@ class _LessonScreen8State extends State<LessonScreen8> {
         ),
       ),
       body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _isListView ? listView() : gridView()),
+        padding: const EdgeInsets.all(8.0),
+        child: _isListView ? listView() : gridView(),
+      ),
       floatingActionButton: FloatingActionButton(
         // Display Grid or List Icon
         child: _isListView ? const Icon(Icons.grid_on) : const Icon(Icons.list),
@@ -38,7 +39,7 @@ class _LessonScreen8State extends State<LessonScreen8> {
     );
   }
 
-  GridView gridView() {
+  Widget gridView() {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -48,12 +49,12 @@ class _LessonScreen8State extends State<LessonScreen8> {
       ),
       shrinkWrap: true,
       itemCount: _recipes.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (_, index) {
         final recipe = _recipes[index];
         // Removing recipe by slide on Grid Item
         return Dismissible(
           key: Key(recipe.name),
-          onDismissed: (direction) {
+          onDismissed: (_) {
             setState(() {
               _recipes.removeAt(index);
             });
@@ -71,11 +72,12 @@ class _LessonScreen8State extends State<LessonScreen8> {
     );
   }
 
-  ListView listView() {
+  Widget listView() {
     return ListView(
       children: _recipes.map((Recipe recipe) {
         return Dismissible(
           key: Key(recipe.name),
+          child: RecipeCard(recipe: recipe),
           // Removing recipe by slide on List Item
           onDismissed: (direction) {
             setState(() {
@@ -90,14 +92,11 @@ class _LessonScreen8State extends State<LessonScreen8> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Icon(Icons.delete, color: Colors.white),
-                  SizedBox(
-                    width: 8.0,
-                  ),
+                  SizedBox(width: 8.0),
                 ],
               ),
             ),
           ),
-          child: RecipeCard(recipe: recipe),
         );
       }).toList(),
     );

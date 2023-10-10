@@ -3,8 +3,13 @@ import '../data/data.dart';
 import '../model/model.dart';
 
 class ArtistDrawer extends StatefulWidget {
-  const ArtistDrawer({super.key, required this.onTapCallback});
-  final Function(String) onTapCallback;
+  const ArtistDrawer({
+    super.key,
+    required this.onTapCallback,
+    required this.selectedArtist,
+  });
+  final Function(String, int) onTapCallback;
+  final int selectedArtist;
 
   @override
   State<ArtistDrawer> createState() => _ArtistDrawerState();
@@ -12,7 +17,6 @@ class ArtistDrawer extends StatefulWidget {
 
 class _ArtistDrawerState extends State<ArtistDrawer> {
   final List<String> artists = Artwork.getAllArtists(ArtProvider().getArt());
-  int _selectedArtist = 0;
 
   @override
   Widget build(BuildContext _) {
@@ -33,14 +37,11 @@ class _ArtistDrawerState extends State<ArtistDrawer> {
             children: [
               ListTile(
                 title: const Text('All'),
-                tileColor: (_selectedArtist == 0)
+                tileColor: (widget.selectedArtist == 0)
                     ? Colors.blue.shade200
                     : Colors.white,
                 onTap: () {
-                  widget.onTapCallback('');
-                  setState(() {
-                    _selectedArtist = 0;
-                  });
+                  widget.onTapCallback('', 0);
                 },
               ),
               SizedBox(
@@ -50,14 +51,11 @@ class _ArtistDrawerState extends State<ArtistDrawer> {
                     itemBuilder: (_, index) {
                       return ListTile(
                         title: Text(artists[index]),
-                        tileColor: (_selectedArtist == index + 1)
+                        tileColor: (widget.selectedArtist == index + 1)
                             ? Colors.blue.shade200
                             : Colors.white,
                         onTap: () {
-                          widget.onTapCallback(artists[index]);
-                          setState(() {
-                            _selectedArtist = index + 1;
-                          });
+                          widget.onTapCallback(artists[index], index + 1);
                         },
                       );
                     }),
