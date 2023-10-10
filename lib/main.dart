@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'lesson9/lesson_screen.dart';
 import 'utils/themes.dart';
 import 'lesson8/lesson_screen.dart';
 
@@ -10,8 +11,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Cocktail Master',
+      title: 'Lessons RD App',
       theme: lightTheme,
+      debugShowCheckedModeBanner: false,
       home: const HomeScreen(),
     );
   }
@@ -36,6 +38,17 @@ class HomeScreen extends StatelessWidget {
                 );
               },
               child: const Text('Go to Lesson 8'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const LessonScreen9()),
+                );
+              },
+              child: const Text('Go to Lesson 9'),
             ),
             const SizedBox(height: 16),
           ],
