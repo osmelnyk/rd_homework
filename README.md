@@ -12,6 +12,6 @@
  3. Lesson 9 Homework
  <details> 
   <summary>Artworks list</summary>
-  <img src="./assets/lesson9.gif">
+  <img src="./assets/lesson9_art.gif">
  </details>
  
