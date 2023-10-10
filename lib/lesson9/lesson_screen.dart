@@ -13,12 +13,15 @@ class LessonScreen9 extends StatefulWidget {
 
 class _LessonScreen9State extends State<LessonScreen9> {
   List<Artwork> artworks = Artwork.filterByArtist(ArtProvider().getArt(), '');
+  // Set the initial value of the selected artist
+  int selectedArtist = 0;
   // Set Key to find Drawer
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void _onTapCallback(String artist) {
+  void _onTapCallback(String artist, int index) {
     setState(() {
       artworks = Artwork.filterByArtist(ArtProvider().getArt(), artist);
+      selectedArtist = index;
     });
   }
 
@@ -76,9 +79,7 @@ class _LessonScreen9State extends State<LessonScreen9> {
                         ),
                         Text(
                           artwork.artist,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                          ),
+                          style: const TextStyle(fontWeight: FontWeight.w700),
                         ),
                         Text(artwork.title),
                       ]),
@@ -91,7 +92,8 @@ class _LessonScreen9State extends State<LessonScreen9> {
           ),
         ],
       ),
-      endDrawer: ArtistDrawer(onTapCallback: _onTapCallback),
+      endDrawer: ArtistDrawer(
+          onTapCallback: _onTapCallback, selectedArtist: selectedArtist),
     );
   }
 }
