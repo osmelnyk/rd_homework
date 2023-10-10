@@ -29,71 +29,132 @@ class _LessonScreen9State extends State<LessonScreen9> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.filter_list),
-                onPressed: () {
-                  // Show the drawer when the filter button is pressed
-                  _scaffoldKey.currentState?.openEndDrawer();
-                },
-              ),
-            ],
-            expandedHeight: 200,
-            flexibleSpace: const FlexibleSpaceBar(
-              title: Text('Artworks'),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final artwork = artworks[index];
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ArtDetailedScreen(artwork: artwork),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(5),
-                      color: Colors.grey[200],
-                      alignment: Alignment.center,
-                      child: Column(children: [
-                        Image.asset(
-                          artwork.image,
-                          height: 170,
-                          fit: BoxFit.fitWidth,
-                        ),
-                        Text(
-                          artwork.artist,
-                          style: const TextStyle(fontWeight: FontWeight.w700),
-                        ),
-                        Text(artwork.title),
-                      ]),
-                    ),
-                  );
-                },
-                childCount: artworks.length,
+      body: LayoutBuilder(builder: (_, constraints) {
+        return CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              actions: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.filter_list),
+                  onPressed: () {
+                    // Show the drawer when the filter button is pressed
+                    _scaffoldKey.currentState?.openEndDrawer();
+                  },
+                ),
+              ],
+              expandedHeight: 200,
+              flexibleSpace: const FlexibleSpaceBar(
+                title: Text('Artworks'),
               ),
             ),
-          ),
-        ],
-      ),
+            SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: (constraints.maxWidth > 700) ? gridView() : listView(),
+            ),
+          ],
+        );
+      }),
       endDrawer: ArtistDrawer(
           onTapCallback: _onTapCallback, selectedArtist: selectedArtist),
+    );
+  }
+
+  Widget listView() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (_, index) {
+          final artwork = artworks[index];
+          return Ink(
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ArtDetailedScreen(artwork: artwork),
+                  ),
+                );
+              },
+              child: Container(
+                margin: const EdgeInsets.all(5),
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        artwork.image,
+                        width: 200,
+                        fit: BoxFit.fitWidth,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              artwork.artist,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                            Text(artwork.title),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+        childCount: artworks.length,
+      ),
+    );
+  }
+
+  Widget gridView() {
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: (MediaQuery.of(context).size.width / 3.3) /
+              (MediaQuery.of(context).size.height / 3.6)),
+      delegate: SliverChildBuilderDelegate(
+        (_, index) {
+          final artwork = artworks[index];
+          return Ink(
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ArtDetailedScreen(artwork: artwork),
+                  ),
+                );
+              },
+              child: Container(
+                margin: const EdgeInsets.all(5),
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(children: [
+                    Image.asset(
+                      artwork.image,
+                      height: 150,
+                      fit: BoxFit.fitHeight,
+                    ),
+                    Text(
+                      artwork.artist,
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                    Text(artwork.title),
+                  ]),
+                ),
+              ),
+            ),
+          );
+        },
+        childCount: artworks.length,
+      ),
     );
   }
 }

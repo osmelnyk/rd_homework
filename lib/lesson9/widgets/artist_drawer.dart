@@ -17,6 +17,10 @@ class ArtistDrawer extends StatefulWidget {
 
 class _ArtistDrawerState extends State<ArtistDrawer> {
   final List<String> artists = Artwork.getAllArtists(ArtProvider().getArt());
+  final String _address = '''
+(845) 561-5224
+77 Ann St
+Newburgh, New York(NY), 12550''';
 
   @override
   Widget build(BuildContext _) {
@@ -24,19 +28,28 @@ class _ArtistDrawerState extends State<ArtistDrawer> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          const DrawerHeader(
-            decoration: BoxDecoration(
+          DrawerHeader(
+            decoration: const BoxDecoration(
               color: Colors.blue,
             ),
-            child: Text(
-              'Artists',
-              style: TextStyle(color: Colors.white, fontSize: 24),
+            child: Column(
+              children: [
+                const Text(
+                  'Gold Gallery',
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  _address,
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ],
             ),
           ),
           Column(
             children: [
               ListTile(
-                title: const Text('All'),
+                title: Text('All'),
                 tileColor: (widget.selectedArtist == 0)
                     ? Colors.blue.shade200
                     : Colors.white,
