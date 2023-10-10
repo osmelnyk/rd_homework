@@ -120,7 +120,7 @@ class RecipeCard extends StatelessWidget {
         );
       },
       // Animation when dialog is shown from bottom
-      transitionBuilder: (context, a1, a2, widget) {
+      transitionBuilder: (_, a1, a2, widget) {
         return SlideTransition(
           position: Tween(begin: const Offset(0, 1), end: const Offset(0, 0))
               .animate(a1),
