@@ -47,10 +47,11 @@ class _ArtDetailedScreenState extends State<ArtDetailedScreen> {
           // Full Screen Image
           InteractiveViewer(
             minScale: 0.1,
-            maxScale: 1.6,
+            maxScale: 6,
             constrained: false,
             child: Image.asset(
               widget.artwork.image,
+              fit: BoxFit.fill,
             ),
           ),
           // Text Description (conditionally)

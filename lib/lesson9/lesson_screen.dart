@@ -64,43 +64,35 @@ class _LessonScreen9State extends State<LessonScreen9> {
       delegate: SliverChildBuilderDelegate(
         (_, index) {
           final artwork = artworks[index];
-          return Ink(
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ArtDetailedScreen(artwork: artwork),
-                  ),
-                );
-              },
-              child: Container(
-                margin: const EdgeInsets.all(5),
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        artwork.image,
-                        width: 200,
-                        fit: BoxFit.fitWidth,
+          return Container(
+            margin: const EdgeInsets.all(5),
+            child: Card(
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: () {
+                  openDetailedScreen(artwork);
+                },
+                child: Row(
+                  children: [
+                    Image.asset(
+                      artwork.image,
+                      width: 200,
+                      fit: BoxFit.fitWidth,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            artwork.artist,
+                            style: const TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                          Text(artwork.title),
+                        ],
                       ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              artwork.artist,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w700),
-                            ),
-                            Text(artwork.title),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -122,38 +114,40 @@ class _LessonScreen9State extends State<LessonScreen9> {
       delegate: SliverChildBuilderDelegate(
         (_, index) {
           final artwork = artworks[index];
-          return Ink(
+          return Card(
+            clipBehavior: Clip.antiAlias,
             child: InkWell(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ArtDetailedScreen(artwork: artwork),
-                  ),
-                );
+                openDetailedScreen(artwork);
               },
-              child: Container(
-                margin: const EdgeInsets.all(5),
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  child: Column(children: [
-                    Image.asset(
-                      artwork.image,
-                      height: 150,
-                      fit: BoxFit.fitHeight,
-                    ),
-                    Text(
-                      artwork.artist,
-                      style: const TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    Text(artwork.title),
-                  ]),
-                ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(children: [
+                  Image.asset(
+                    artwork.image,
+                    height: 145,
+                    fit: BoxFit.fitHeight,
+                  ),
+                  Text(
+                    artwork.artist,
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  Text(artwork.title),
+                ]),
               ),
             ),
           );
         },
         childCount: artworks.length,
+      ),
+    );
+  }
+
+  void openDetailedScreen(Artwork artwork) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ArtDetailedScreen(artwork: artwork),
       ),
     );
   }
