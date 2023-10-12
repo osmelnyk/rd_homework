@@ -25,8 +25,8 @@ Newburgh, New York(NY), 12550''';
   @override
   Widget build(BuildContext _) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           DrawerHeader(
             decoration: const BoxDecoration(
@@ -46,34 +46,20 @@ Newburgh, New York(NY), 12550''';
               ],
             ),
           ),
-          Column(
-            children: [
-              ListTile(
-                title: Text('All'),
-                tileColor: (widget.selectedArtist == 0)
-                    ? Colors.blue.shade200
-                    : Colors.white,
-                onTap: () {
-                  widget.onTapCallback('', 0);
-                },
-              ),
-              SizedBox(
-                height: double.maxFinite,
-                child: ListView.builder(
-                    itemCount: artists.length,
-                    itemBuilder: (_, index) {
-                      return ListTile(
-                        title: Text(artists[index]),
-                        tileColor: (widget.selectedArtist == index + 1)
-                            ? Colors.blue.shade200
-                            : Colors.white,
-                        onTap: () {
-                          widget.onTapCallback(artists[index], index + 1);
-                        },
-                      );
-                    }),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: List<Widget>.generate(artists.length, (int index) {
+                return ChoiceChip(
+                  label: Text(artists[index]),
+                  selected: widget.selectedArtist == index,
+                  onSelected: (_) =>
+                      widget.onTapCallback(artists[index], index),
+                );
+              }),
+            ),
           )
         ],
       ),

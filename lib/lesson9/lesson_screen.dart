@@ -12,7 +12,8 @@ class LessonScreen9 extends StatefulWidget {
 }
 
 class _LessonScreen9State extends State<LessonScreen9> {
-  List<Artwork> artworks = Artwork.filterByArtist(ArtProvider().getArt(), '');
+  List<Artwork> artworks =
+      Artwork.filterByArtist(ArtProvider().getArt(), 'All');
   // Set the initial value of the selected artist
   int selectedArtist = 0;
   // Set Key to find Drawer
@@ -55,7 +56,9 @@ class _LessonScreen9State extends State<LessonScreen9> {
         );
       }),
       endDrawer: ArtistDrawer(
-          onTapCallback: _onTapCallback, selectedArtist: selectedArtist),
+        onTapCallback: _onTapCallback,
+        selectedArtist: selectedArtist,
+      ),
     );
   }
 
@@ -112,6 +115,7 @@ class _LessonScreen9State extends State<LessonScreen9> {
           childAspectRatio: (MediaQuery.of(context).size.width / 3.3) /
               (MediaQuery.of(context).size.height / 3.6)),
       delegate: SliverChildBuilderDelegate(
+        childCount: artworks.length,
         (_, index) {
           final artwork = artworks[index];
           return Card(
@@ -138,7 +142,6 @@ class _LessonScreen9State extends State<LessonScreen9> {
             ),
           );
         },
-        childCount: artworks.length,
       ),
     );
   }

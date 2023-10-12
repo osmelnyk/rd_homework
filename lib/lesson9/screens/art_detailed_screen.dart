@@ -61,7 +61,8 @@ class _ArtDetailedScreenState extends State<ArtDetailedScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: toggleDescription,
         child: Icon(
-            isDescriptionVisible ? Icons.visibility_off : Icons.visibility),
+          isDescriptionVisible ? Icons.visibility_off : Icons.visibility,
+        ),
       ),
     );
   }
