@@ -107,13 +107,14 @@ class _LessonScreen9State extends State<LessonScreen9> {
   }
 
   Widget gridView() {
+    final Size size = MediaQuery.of(context).size;
+
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,
-          childAspectRatio: (MediaQuery.of(context).size.width / 3.3) /
-              (MediaQuery.of(context).size.height / 3.6)),
+          childAspectRatio: (size.width / 3.3) / (size.height / 3.6)),
       delegate: SliverChildBuilderDelegate(
         childCount: artworks.length,
         (_, index) {
