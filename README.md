@@ -14,4 +14,11 @@
   <summary>Artworks list</summary>
   <img src="./assets/lesson9_art.gif">
  </details>
+
+ 3. Lesson 10 Homework
+ <details> 
+  <summary>Settings</summary>
+  <img src="./assets/lesson10_settings.gif">
+ </details>
+
  

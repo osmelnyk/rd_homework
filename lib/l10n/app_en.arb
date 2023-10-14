@@ -1,0 +1,13 @@
+{
+  "settings": "Settings",
+  "language": "Language",
+  "systemLang": "System",
+  "english": "English",
+  "ukrainian": "Ukrainian",
+  "darkTheme": "Dark Theme",
+  "lightTheme": "Light Theme",
+  "biggerFont": "Bigger Font",
+  "fontFamily": "Font Family",
+  "lessons": "Lessons",
+  "lesson": "Lesson"
+}
