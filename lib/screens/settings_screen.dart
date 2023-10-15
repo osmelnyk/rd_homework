@@ -31,21 +31,6 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  // Font size selector
-  SwitchListTile fontSizeSelector(
-      bool fontSize, WidgetRef ref, BuildContext context) {
-    return SwitchListTile(
-      value: fontSize,
-      onChanged: (value) {
-        ref.read(fontSizeProvider.notifier).toggle();
-      },
-      title: Text(
-        AppLocalizations.of(context)!.biggerFont,
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
-    );
-  }
-
   // Dark theme selector
   SwitchListTile darkThemeSelector(
       bool darkMode, WidgetRef ref, BuildContext context) {
@@ -56,6 +41,21 @@ class SettingsScreen extends ConsumerWidget {
       },
       title: Text(
         AppLocalizations.of(context)!.darkTheme,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+    );
+  }
+
+  // Font size selector
+  SwitchListTile fontSizeSelector(
+      bool fontSize, WidgetRef ref, BuildContext context) {
+    return SwitchListTile(
+      value: fontSize,
+      onChanged: (value) {
+        ref.read(fontSizeProvider.notifier).toggle();
+      },
+      title: Text(
+        AppLocalizations.of(context)!.biggerFont,
         style: Theme.of(context).textTheme.titleMedium,
       ),
     );
