@@ -9,6 +9,7 @@ import 'package:rd_homework/providers.dart';
 // Utils
 import 'package:rd_homework/utils/theme.dart';
 // Screens
+import 'lesson12/screens/task.dart';
 import 'screens/settings_screen.dart';
 import 'lesson9/lesson_screen.dart';
 import 'lesson8/lesson_screen.dart';
@@ -55,6 +56,9 @@ class MyApp extends ConsumerWidget {
             '/': (context) =>
                 HomeScreen(title: AppLocalizations.of(context)!.lessons),
             '/settings': (context) => const SettingsScreen(),
+            '/lesson8': (context) => const LessonScreen8(),
+            '/lesson9': (context) => const LessonScreen9(),
+            '/lesson12': (context) => const TaskScreen(),
           }),
     );
   }
@@ -85,24 +89,23 @@ class HomeScreen extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const LessonScreen8()),
-                );
+                Navigator.of(context).pushNamed('/lesson8');
               },
               child: Text('${AppLocalizations.of(context)!.lesson} 8'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const LessonScreen9()),
-                );
+                Navigator.of(context).pushNamed('/lesson9');
               },
               child: Text('${AppLocalizations.of(context)!.lesson} 9'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/lesson12');
+              },
+              child: Text('${AppLocalizations.of(context)!.lesson} 12'),
             ),
             const SizedBox(height: 16),
           ],
