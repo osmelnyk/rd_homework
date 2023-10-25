@@ -6,9 +6,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rd_homework/l10n/l10n.dart';
 // Providers
 import 'package:rd_homework/providers.dart';
+import 'package:rd_homework/lesson13/product_provider.dart';
 // Utils
 import 'package:rd_homework/utils/theme.dart';
 // Screens
+import 'lesson13/screens/inherited.dart';
 import 'lesson12/screens/task.dart';
 import 'screens/settings_screen.dart';
 import 'lesson9/lesson_screen.dart';
@@ -31,35 +33,38 @@ class MyApp extends ConsumerWidget {
         // Changes the text scale factor
         textScaleFactor: fontSize ? 1.2 : 1.0,
       ),
-      child: MaterialApp(
-          title: 'Lessons RD',
-          // Hide the debug banner in debug mode
-          debugShowCheckedModeBanner: false,
-          // Theming
-          theme: lightTheme(ref),
-          darkTheme: darkTheme(ref),
-          themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
+      child: ProductProvider(
+        child: MaterialApp(
+            title: 'Lessons RD',
+            // Hide the debug banner in debug mode
+            debugShowCheckedModeBanner: false,
+            // Theming
+            theme: lightTheme(ref),
+            darkTheme: darkTheme(ref),
+            themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
 
-          // Localizations
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: L10n.all,
-          locale: locale != null ? Locale(locale) : null,
+            // Localizations
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: L10n.all,
+            locale: locale != null ? Locale(locale) : null,
 
-          // Routing
-          initialRoute: '/',
-          routes: {
-            '/': (context) =>
-                HomeScreen(title: AppLocalizations.of(context)!.lessons),
-            '/settings': (context) => const SettingsScreen(),
-            '/lesson8': (context) => const LessonScreen8(),
-            '/lesson9': (context) => const LessonScreen9(),
-            '/lesson12': (context) => const TaskScreen(),
-          }),
+            // Routing
+            initialRoute: '/',
+            routes: {
+              '/': (context) =>
+                  HomeScreen(title: AppLocalizations.of(context)!.lessons),
+              '/settings': (context) => const SettingsScreen(),
+              '/lesson8': (context) => const LessonScreen8(),
+              '/lesson9': (context) => const LessonScreen9(),
+              '/lesson12': (context) => const TaskScreen(),
+              '/lesson13': (context) => const InheritedScreen(),
+            }),
+      ),
     );
   }
 }
@@ -106,6 +111,13 @@ class HomeScreen extends StatelessWidget {
                 Navigator.of(context).pushNamed('/lesson12');
               },
               child: Text('${AppLocalizations.of(context)!.lesson} 12'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/lesson13');
+              },
+              child: Text('${AppLocalizations.of(context)!.lesson} 13'),
             ),
             const SizedBox(height: 16),
           ],

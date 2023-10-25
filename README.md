@@ -27,4 +27,8 @@
   <img src="./assets/lesson12_tasks.gif">
  </details>
 
- 
+ 6. Lesson 13 Homework
+ <details> 
+  <summary>Inherited Widget</summary>
+  <img src="./assets/lesson13_inherited.gif">
+ </details>
