@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'
+// Conflicts with Provider, so we execlude it from the import
+    hide
+        ChangeNotifierProvider;
+import 'package:provider/provider.dart';
 // Localizations
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -10,18 +14,29 @@ import 'package:rd_homework/lesson13/product_provider.dart';
 // Utils
 import 'package:rd_homework/utils/theme.dart';
 // Screens
+import 'lesson14/notifiers/cart_notifier.dart';
+import 'lesson14/notifiers/product_notifier.dart';
+import 'lesson14/screens/product_list.dart';
 import 'lesson13/screens/inherited.dart';
 import 'lesson12/screens/task.dart';
 import 'screens/settings_screen.dart';
 import 'lesson9/lesson_screen.dart';
 import 'lesson8/lesson_screen.dart';
 
-void main() => runApp(const ProviderScope(child: MyApp()));
+void main() {
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (_) => CartNotifier(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => ProductNotifier(),
+    ),
+  ], child: const ProviderScope(child: MyApp())));
+}
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final darkMode = ref.watch(darkModeProvider);
@@ -63,6 +78,7 @@ class MyApp extends ConsumerWidget {
               '/lesson9': (context) => const LessonScreen9(),
               '/lesson12': (context) => const TaskScreen(),
               '/lesson13': (context) => const InheritedScreen(),
+              '/lesson14': (context) => const ProductsScreen(),
             }),
       ),
     );
@@ -118,6 +134,13 @@ class HomeScreen extends StatelessWidget {
                 Navigator.of(context).pushNamed('/lesson13');
               },
               child: Text('${AppLocalizations.of(context)!.lesson} 13'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/lesson14');
+              },
+              child: Text('${AppLocalizations.of(context)!.lesson} 14'),
             ),
             const SizedBox(height: 16),
           ],
